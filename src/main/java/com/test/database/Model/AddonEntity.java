@@ -1,7 +1,6 @@
 package com.test.database.Model;
 
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -24,8 +23,8 @@ public class AddonEntity {
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Set<PlanEntity> inPlans;
 
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private Set<RoleEntity> mappedroles;
+    @ManyToMany(cascade = CascadeType.ALL)
+    private Set<RoleEntity> mappedRoles;
 
 
 

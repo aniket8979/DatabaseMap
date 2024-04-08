@@ -6,10 +6,14 @@ import com.test.database.Model.RoleEntity;
 import com.test.database.Repo.AddonRepo;
 import com.test.database.Repo.RoleRepo;
 import lombok.RequiredArgsConstructor;
+import org.antlr.v4.runtime.LexerInterpreter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -37,21 +41,25 @@ public class RoleController {
 
 
 
-//    @PostMapping("/addon/{planId}")
-//    public ResponseEntity<?> mapAddon(@PathVariable int planId, @RequestBody List<Integer> addon){
-//        PlanEntity plan = roleRepo.findById(planId)
-//                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Plan Not Found"));
-//        List<AddonEntity> allAddon = addonRepo.findAllById(addon);
-//        plan.getUsedAddons().addAll(allAddon);
-//        roleRepo.save(plan);
-//        return ResponseEntity.ok(plan);
-//    }
+    @PostMapping("/mappedAddon/{roleId}")
+    public ResponseEntity<?> mapAddon(@PathVariable int roleId, @RequestBody List<Integer> addons){
+        RoleEntity role = roleRepo.findById(roleId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Role Not Found"));
+
+        List<AddonEntity> allAddon = addonRepo.findAllById(addons);
+        role.getAddons().addAll(allAddon);
+        roleRepo.save(role);
+
+        return ResponseEntity.ok(role);
+    }
 
 
 
     @GetMapping("/getall")
-    public ResponseEntity<?> getAllRole(){
-        return ResponseEntity.ok(roleRepo.findAll());
+    public ResponseEntity<List<RoleEntity>> getAllRole(){
+        List<RoleEntity> all = roleRepo.findAll();
+//        System.out.println(all.get(0).getAddons().stream().findFirst().get().getAddonId());
+        return ResponseEntity.ok(all);
     }
 
 

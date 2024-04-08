@@ -49,6 +49,9 @@ public class AddonController {
     @DeleteMapping("/delete/{addonId}")
     public ResponseEntity<?> deleteAddon(@PathVariable int addonId){
         AddonEntity addon = addonRepo.getReferenceById(addonId);
+        addon.getFeatures().clear();
+
+        addonRepo.save(addon);
         addonRepo.deleteById(addonId);
         return ResponseEntity.ok("deleted");
     }

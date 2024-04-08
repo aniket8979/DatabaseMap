@@ -1,14 +1,20 @@
 package com.test.database.Controller;
 
 
+import com.test.database.Model.AddonEntity;
 import com.test.database.Model.RoleEntity;
 import com.test.database.Model.UserEntity;
 import com.test.database.Repo.RoleRepo;
 import com.test.database.Repo.UserRepo;
 import lombok.RequiredArgsConstructor;
+import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/user")
@@ -39,6 +45,20 @@ public class UserController {
 //        planRepo.save(plan);
 //        return ResponseEntity.ok(plan);
 //    }
+
+    @PostMapping("/mapRole/{userId}/{roleId}")
+    public ResponseEntity<?> mapAddon(@PathVariable int userId, @PathVariable int roleId){
+        RoleEntity role = roleRepo.findById(roleId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Role Not Found"));
+
+        UserEntity user = userRepo.findById(userId).get();
+
+        user.setRole(role);
+
+        userRepo.save(user);
+
+        return ResponseEntity.ok(user);
+    }
 
 
 

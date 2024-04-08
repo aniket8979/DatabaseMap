@@ -15,10 +15,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
-import javax.management.relation.Role;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/plan")
@@ -78,19 +77,32 @@ public class PlanController {
         plan.getUsedAddons()
                 .removeIf(r -> r.getAddonId()==addonId);
 
+        Set<RoleEntity>  res = roleRepo.findByAddons_AddonId(addonId);
 //        System.out.println(addon.getMappedroles());;
-        Set<RoleEntity> mappedRoles = addon.getMappedroles();
-        for(RoleEntity role : mappedRoles){
-            System.out.println("itr round 1 "+ role.getRoleName());
+       // addon.getMappedRoles().removeIf()
+
+
+
+        Set<RoleEntity> mappedRoles = addon.getMappedRoles();
+//
+//        System.out.println(mappedRoles.stream().findFirst().get().getRoleName().toString());
+//        System.out.println(mappedRoles.stream().findFirst().get().getAddons().stream().findFirst().get().getAddonName().toString());
+
+
 //            role.getMappedUser().stream()
 //                    .filter(userEntity -> userEntity.getRole().getAddons()
 //                            .removeIf(addonEntity -> addonEntity.getAddonId()==addonId));
+
+
+        for(RoleEntity role : res){
+            System.out.println("itr round 1 "+ role.getRoleName());
             role.getAddons().removeIf(addonEntity -> addonEntity.getAddonId()==addonId);
             roleRepo.save(role);
             roleRepo.flush();
         }
 
-        addon.getMappedroles().clear();
+        addon.getMappedRoles().clear();
+        addon.getFeatures().clear();
         addonRepo.save(addon);
         addonRepo.delete(addon);
 
