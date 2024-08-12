@@ -2,6 +2,7 @@ A RestAPI Project for mimicking database mapping of larger projects using Spring
 The project :
   - Organisaiton entity : To add/remove/update/delete organisaitons
   - Users enitity : To manage, map/unmap users from oraganisations
+  - Attendance Entity : To allow users to mark their checkin-checkout inside organisaiton for marking attendance
   - Role Entity : To allow organisations to create cutoms role for user authorisation
   - Addon Entity : To define a Module for various purpose, such as allowing organisaiton to buy perticular module by buying Plans
   - Feature Entity : To manage sub-features inside of a Module.
